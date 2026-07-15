@@ -1,5 +1,31 @@
 # 前言
 
+MacMini M4
+
+```bash
+pyenv install 3.8.20
+
+python -m venv .venv
+source .venv/bin/activate
+
+brew install chromedriver
+
+授权chromedriver
+
+xattr -d com.apple.quarantine `which chromedriver`
+或
+sudo xattr -r -d com.apple.quarantine `which chromedriver`
+
+pip install -r requirements.txt
+
+brew install zbar
+
+DYLD_LIBRARY_PATH=/opt/homebrew/opt/zbar/lib python SourcePackages/pandalearning.py
+
+```
+
+
+
 官方网站： https://techxuexi.js.org/
 
 **[交流群地址及说明（点击查看）](https://github.com/TechXueXi/TechXueXi/issues/14)**
