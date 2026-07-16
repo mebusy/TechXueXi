@@ -430,11 +430,11 @@ class Mydriver:
                 if "expiry" in cookie:
                     cookie["expiry"] = int(cookie["expiry"])
 
-                # cookie.pop("domain", None)
                 if self.driver.current_url.startswith(
                     "https://www.xuexi.cn"
                 ) and cookie_domain.endswith("pc.xuexi.cn"):
-                    pass
+                    cookie.pop("domain", None)
+                    self.driver.add_cookie(cookie)
                 else:
                     self.driver.add_cookie(cookie)
 
