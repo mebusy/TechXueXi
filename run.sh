@@ -1,6 +1,4 @@
-##!/bin/bash
+#!/bin/bash
 
-set -e
-
-DYLD_LIBRARY_PATH=/opt/homebrew/opt/zbar/lib python SourcePackages/pandalearning.py
-
+echo "开始运行"
+/usr/local/bin/python /xuexi/pandalearning.py
