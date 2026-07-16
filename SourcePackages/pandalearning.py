@@ -43,7 +43,7 @@ def start_learn(uid, name):
     #  0 读取版本信息
     start_time = time.time()
     nohead, lock, stime, Single = get_argv()
-    print("是否无头模式：{0} {1}".format(nohead, os.getenv('Nohead')))
+    print("是否无头模式：{0} {1}".format(nohead, os.getenv("Nohead")))
     cookies = user.get_cookie(uid)
     if nohead == True:
         TechXueXi_mode = "3"
@@ -53,16 +53,16 @@ def start_learn(uid, name):
 
     if not name:
         user_fullname = user.get_fullname(uid)
-        name = user_fullname.split('_', 1)[1]
+        name = user_fullname.split("_", 1)[1]
     else:
-        user_fullname = uid+"_"+name
+        user_fullname = uid + "_" + name
 
     if not cookies or TechXueXi_mode == "0":
         msg = ""
         if name == "新用户":
             msg = "需要增加新用户，请扫码登录，否则请无视"
         else:
-            msg = name+" 登录信息失效，请重新扫码"
+            msg = name + " 登录信息失效，请重新扫码"
         # print(msg)
         gl.pushprint(msg, chat_id=uid)
         if gl.pushmode == "6":
@@ -79,7 +79,7 @@ def start_learn(uid, name):
         user.save_cookies(cookies)
         uid = user.get_userId(cookies)
         user_fullname = user.get_fullname(uid)
-        name = user_fullname.split('_', 1)[1]
+        name = user_fullname.split("_", 1)[1]
         user.update_last_user(uid)
     output = name + " 登录正常，开始学习...\n"
 
@@ -91,21 +91,24 @@ def start_learn(uid, name):
     if TechXueXi_mode in ["1", "3"]:
 
         article_thread = threads.MyThread(
-            "文章学 xi ", article, uid, cookies, article_index, scores, lock=lock)
+            "文章学 xi ", article, uid, cookies, article_index, scores, lock=lock
+        )
         video_thread = threads.MyThread(
-            "视频学 xi ", video, uid, cookies, video_index, scores, lock=lock)
+            "视频学 xi ", video, uid, cookies, video_index, scores, lock=lock
+        )
         article_thread.start()
         video_thread.start()
         article_thread.join()
         video_thread.join()
     if TechXueXi_mode in ["2", "3"]:
-#        print('开始每日答题……')
-#        daily(cookies, scores)
-        print('开始每周答题……')
-        weekly(cookies, scores)
-        if nohead != True or gl.zhuanxiang == True:
-            print('开始专项答题……')
-            zhuanxiang(cookies, scores)
+        # print("开始每日答题……")
+        # daily(cookies, scores)
+        # print('开始每周答题……')
+        # weekly(cookies, scores)
+        # if nohead != True or gl.zhuanxiang == True:
+        #     print("开始专项答题……")
+        #     zhuanxiang(cookies, scores)
+        pass
 
     if TechXueXi_mode == "4":
         user.select_user()
@@ -115,8 +118,15 @@ def start_learn(uid, name):
         user.refresh_all_cookies(live_time=11.90)
 
     seconds_used = int(time.time() - start_time)
-    gl.pushprint(name+" 总计用时 " + str(math.floor(seconds_used / 60)) +
-                 " 分 " + str(seconds_used % 60) + " 秒", chat_id=uid)
+    gl.pushprint(
+        name
+        + " 总计用时 "
+        + str(math.floor(seconds_used / 60))
+        + " 分 "
+        + str(seconds_used % 60)
+        + " 秒",
+        chat_id=uid,
+    )
     show_scorePush(cookies, chat_id=uid)
     try:
         user.shutdown(stime)
@@ -134,9 +144,18 @@ def start(nick_name=None):
         user_list.append(["", "新用户"])
     for i in range(len(user_list)):
         try:
-            if nick_name is None or nick_name == user_list[i][1] or nick_name == user_list[i][0]:
+            if (
+                nick_name is None
+                or nick_name == user_list[i][1]
+                or nick_name == user_list[i][0]
+            ):
                 _learn = threads.MyThread(
-                    user_list[i][0]+"开始学xi", start_learn, user_list[i][0], user_list[i][1], lock=Single)
+                    user_list[i][0] + "开始学xi",
+                    start_learn,
+                    user_list[i][0],
+                    user_list[i][1],
+                    lock=Single,
+                )
                 _learn.start()
         except:
             gl.pushprint("学习页面崩溃，学习终止")
@@ -158,7 +177,7 @@ def get_user_list():
     values = dic.values()
     msg = ""
     for v in values:
-        msg += v+"\n"
+        msg += v + "\n"
     if msg == "":
         msg = "cookie全部过期，请重新登录"
     return msg
@@ -174,7 +193,10 @@ def get_all_user_name():
 
 def add_user(chat_id=None):
     get_argv()
-    gl.pushprint("请登录（登录方式请仔细阅读文档，如果觉得这是让你下载，就是你没仔细读文档）：", chat_id=chat_id)
+    gl.pushprint(
+        "请登录（登录方式请仔细阅读文档，如果觉得这是让你下载，就是你没仔细读文档）：",
+        chat_id=chat_id,
+    )
     driver_login = Mydriver()
     cookies = driver_login.login(chat_id)
     driver_login.quit()
@@ -186,22 +208,27 @@ def add_user(chat_id=None):
     uid = user.get_userId(cookies)
     user_fullname = user.get_fullname(uid)
     user.update_last_user(uid)
-    gl.pushprint(user_fullname+"登录成功", chat_id=chat_id)
+    gl.pushprint(user_fullname + "登录成功", chat_id=chat_id)
 
 
-if __name__ == '__main__':
-    if(cfg_get('display.banner') != False):  # banner文本直接硬编码，不要放在conf中
-        print("=" * 60 +
-              '\n    我们的网站，GitHub 等页面已经被中国大陆的浏览器加入黑名单，请用谷歌浏览器 chrome 打开我们的站点。' +
-              '\n    科技强 guo 官方网站：https://techxuexi.js.org' +
-              '\n    Github地址：https://github.com/TechXueXi' +
-              '\n使用本项目，必须接受以下内容，否则请立即退出：' +
-              '\n    - TechXueXi 仅额外提供给“爱党爱 guo ”且“工作学业繁重”的人' +
-              '\n    - 项目开源协议 LGPL-3.0' +
-              '\n    - 不得利用本项目盈利' +
-              '\n另外，我们建议你参与一个维护劳动法的项目：' +
-              '\nhttps://996.icu/ 或 https://github.com/996icu/996.ICU/blob/master/README_CN.md')
-    print("=" * 60, '''\nTechXueXi 现支持以下模式（答题时请值守电脑旁处理少部分不正常的题目）：''')
-    print(cfg_get('base.ModeText', "") + '\n' + "=" * 60)
+if __name__ == "__main__":
+    if cfg_get("display.banner") != False:  # banner文本直接硬编码，不要放在conf中
+        print(
+            "=" * 60
+            + "\n    我们的网站，GitHub 等页面已经被中国大陆的浏览器加入黑名单，请用谷歌浏览器 chrome 打开我们的站点。"
+            + "\n    科技强 guo 官方网站：https://techxuexi.js.org"
+            + "\n    Github地址：https://github.com/TechXueXi"
+            + "\n使用本项目，必须接受以下内容，否则请立即退出："
+            + "\n    - TechXueXi 仅额外提供给“爱党爱 guo ”且“工作学业繁重”的人"
+            + "\n    - 项目开源协议 LGPL-3.0"
+            + "\n    - 不得利用本项目盈利"
+            + "\n另外，我们建议你参与一个维护劳动法的项目："
+            + "\nhttps://996.icu/ 或 https://github.com/996icu/996.ICU/blob/master/README_CN.md"
+        )
+    print(
+        "=" * 60,
+        """\nTechXueXi 现支持以下模式（答题时请值守电脑旁处理少部分不正常的题目）：""",
+    )
+    print(cfg_get("base.ModeText", "") + "\n" + "=" * 60)
     # 模式提示文字请在 ./config/default_template.conf 处修改。
     start()

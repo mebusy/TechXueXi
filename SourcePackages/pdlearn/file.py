@@ -8,15 +8,16 @@ def check_directory(filename):
     # filename 最多支持一层文件夹下的json
     # os.chdir(sys.path[0]) # 切换pwd到python文件路径
     split_filename = filename.split("/", 1)
-    if(len(split_filename) > 1):  # 包含一层文件夹
-        if(not os.path.exists(split_filename[0])):
+    if len(split_filename) > 1:  # 包含一层文件夹
+        if not os.path.exists(split_filename[0]):
             os.mkdir(split_filename[0])
 
 
 def get_json_data(filename, template_json_str):
+    print("正在读取", os.path.join(os.getcwd(), filename))
     check_directory(filename)
-    if(os.path.exists(filename) and os.path.getsize(filename) != 0):
-        with open(filename, 'r', encoding='utf-8') as j:
+    if os.path.exists(filename) and os.path.getsize(filename) != 0:
+        with open(filename, "r", encoding="utf-8") as j:
             try:
                 json_data = json.load(j)
             except Exception as e:
@@ -35,7 +36,7 @@ def get_json_data(filename, template_json_str):
                 #         print(new[error_line_index+1])
                 #         if '},' in new[error_line_index+1] and '"0":"default"' in new[error_line_index-1]:
                 #             print(new[error_line_index-1])
-                #             # 一般错误为'        "0":"default"\n' 
+                #             # 一般错误为'        "0":"default"\n'
                 #             new[error_line_index-1] = new[error_line_index-1][:-1]+',\n'
                 #             new[error_line_index] = ''
                 #             new[error_line_index+1] = ''
@@ -51,9 +52,15 @@ def get_json_data(filename, template_json_str):
 
 def save_json_data(filename, object_to_save, sort_keys=True):
     check_directory(filename)
-    with open(filename, 'w', encoding='utf-8') as o:
-        json.dump(object_to_save, o, sort_keys=True, indent=4,
-                  separators=(',', ':'), ensure_ascii=False)
+    with open(filename, "w", encoding="utf-8") as o:
+        json.dump(
+            object_to_save,
+            o,
+            sort_keys=True,
+            indent=4,
+            separators=(",", ":"),
+            ensure_ascii=False,
+        )
 
 
 def get_conf_file(filename, template_conf_str):
@@ -73,5 +80,5 @@ def get_conf_file(filename, template_conf_str):
 
 def save_text_file(filename, text):
     check_directory(filename)
-    with open(filename, 'w', encoding='utf-8') as o:
+    with open(filename, "w", encoding="utf-8") as o:
         o.write(text)
