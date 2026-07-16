@@ -413,9 +413,9 @@ class Mydriver:
         return cookies
 
     def set_cookies(self, cookies):
-        try:
-            # 解决Chrome 90版本无法运行的问题[https://github.com/TechXueXi/TechXueXi/issues/78]
-            for cookie in cookies:
+        for cookie in cookies:
+            try:
+                # 解决Chrome 90版本无法运行的问题[https://github.com/TechXueXi/TechXueXi/issues/78]
                 cookie_domain = cookie["domain"]
                 # fix cookie domain `.pc.xuexi.cn` caused refresh fail
                 if cookie_domain.endswith("pc.xuexi.cn"):
@@ -426,13 +426,22 @@ class Mydriver:
                     print(f"unknown cookie domain {cookie_domain}, skip it")
                     continue
 
-                # print(f'current cookie: {cookie}')
                 # for expiry error (maybe old version compatibility) add by Sean 20210706
                 if "expiry" in cookie:
                     cookie["expiry"] = int(cookie["expiry"])
-                self.driver.add_cookie(cookie)
-        except exceptions.InvalidCookieDomainException as e:
-            print(e.__str__)
+
+                # cookie.pop("domain", None)
+                if self.driver.current_url.startswith(
+                    "https://www.xuexi.cn"
+                ) and cookie_domain.endswith("pc.xuexi.cn"):
+                    pass
+                else:
+                    self.driver.add_cookie(cookie)
+
+            except exceptions.InvalidCookieDomainException as e:
+                print(self.driver.current_url)
+                print(f"current cookie: {cookie}")
+                print(e.__str__)
 
     def title_is(self, title):
         return self.driver.title == title
