@@ -235,6 +235,8 @@ class Mydriver:
                 "/opt/homebrew/bin/chromedriver",  # mac arm64
             ]
             have_find = False
+            # print working directory
+            print("当前工作目录: ", os.getcwd())
             for one_path in chromedriver_paths:
                 if os.path.exists(one_path):
                     self.driver = self.webdriver.Chrome(
