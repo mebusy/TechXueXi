@@ -236,7 +236,7 @@ class Mydriver:
             ]
             have_find = False
             # print working directory
-            print("当前工作目录: ", os.getcwd())
+            print("当前工作目录: ", os.getcwd(), "\n")
             for one_path in chromedriver_paths:
                 if os.path.exists(one_path):
                     self.driver = self.webdriver.Chrome(
@@ -436,6 +436,8 @@ class Mydriver:
                     "https://www.xuexi.cn"
                 ) and cookie_domain.endswith("pc.xuexi.cn"):
                     cookie.pop("domain", None)
+                    # set domain .xuexi.cn
+                    cookie["domain"] = ".xuexi.cn"
                     self.driver.add_cookie(cookie)
                 else:
                     self.driver.add_cookie(cookie)
