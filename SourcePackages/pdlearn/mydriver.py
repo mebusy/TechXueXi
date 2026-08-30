@@ -224,6 +224,7 @@ class Mydriver:
 
             # ==================== 寻找 chromedriver ====================
             chromedriver_paths = [
+                "/opt/homebrew/bin/chromedriver",  # mac arm64
                 "./chrome/chromedriver.exe",  # win
                 "./chromedriver",  # linux
                 "/usr/bin/chromedriver",  # linux用户安装
@@ -232,7 +233,6 @@ class Mydriver:
                 # raspberry linux （需要包安装chromedriver）
                 "/usr/lib/chromium-browser/chromedriver",
                 "/usr/local/bin/chromedriver",  # linux 包安装chromedriver
-                "/opt/homebrew/bin/chromedriver",  # mac arm64
             ]
             have_find = False
             # print working directory
